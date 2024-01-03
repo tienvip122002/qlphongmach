@@ -2,6 +2,8 @@ from flask import Flask, render_template, request, redirect, url_for, flash, url
 from app.models import Medicine
 import dao
 from app import app, db
+from flask_login import login_user, logout_user, login_required
+from flask_login import current_user
 
 
 @app.route('/')
@@ -78,6 +80,38 @@ def home():
 @app.route('/home/services')
 def services():
     return render_template('homepage/services.html')
+
+@app.route('/logout')
+def process_user_logout():
+    logout_user()
+    return redirect("/login")
+
+
+@app.route('/login')
+def login():
+    return render_template('homepage/login.html')
+
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    err_msg = None
+
+    if request.method.__eq__('POST'):
+        password = request.form.get('password')
+        confirm = request.form.get('confirm')
+        if password.__eq__(confirm):
+            try:
+                dao.add_user(name=request.form.get('name'),
+                             username=request.form.get('username'),
+                             password=password)
+            except Exception as ex:
+                print(str(ex))
+                err_msg = 'Hệ thống đang bị lỗi!'
+            else:
+                return redirect('/login')
+        else:
+            err_msg = 'Mật khẩu KHÔNG khớp!'
+    return render_template('homepage/register.html', err_msg=err_msg)
 
 
 if __name__ == "__main__":
