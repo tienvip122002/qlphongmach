@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, url_for
 from app.models import Medicine
 import dao
 from app import app, db
@@ -66,6 +66,18 @@ def update(id):
 
     else:
         return render_template('medicine/update.html', task=task)
+
+
+
+@app.route('/home')
+def home():
+    return render_template('homepage/index.html')
+
+
+
+@app.route('/home/services')
+def services():
+    return render_template('homepage/services.html')
 
 
 if __name__ == "__main__":

@@ -24,62 +24,63 @@ class User(db.Model, UserMixin):
     def __str__(self):
         return self.name
 
-
-class Patient(db.Model):
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String(50), nullable=True)
-    gender = Column(String(10), nullable=True)
-    date_of_birth = Column(DateTime, nullable=True)
-    address = Column(String(100), nullable=True)
-
-    def __str__(self):
-        return self.name
-
-
-class PatientWithAccount(db.Model):
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    registration_date = Column(DateTime)
-    user_id = Column(Integer, ForeignKey(User.id), nullable=False, unique=True)
-    patient_id = Column(Integer, ForeignKey(Patient.id), nullable=False, unique=True)
-
-    def __str__(self):
-        return self.name
-
-
-class Nurse(db.Model):
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String(50), nullable=True)
-    user_id = Column(Integer, ForeignKey(User.id), nullable=False, unique=True)
-
-    def __str__(self):
-        return self.name
-
-
-class Doctor(db.Model):
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String(50), nullable=True)
-    user_id = Column(Integer, ForeignKey(User.id), nullable=False, unique=True)
-
-    def __str__(self):
-        return self.name
-
-
-class Cashier(db.Model):
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String(50), nullable=True)
-    user_id = Column(Integer, ForeignKey(User.id), nullable=False, unique=True)
-
-    def __str__(self):
-        return self.name
-
+#
+# class Patient(db.Model):
+#     id = Column(Integer, primary_key=True, autoincrement=True)
+#     name = Column(String(50), nullable=True)
+#     gender = Column(String(10), nullable=True)
+#     date_of_birth = Column(DateTime, nullable=True)
+#     address = Column(String(100), nullable=True)
+#
+#     def __str__(self):
+#         return self.name
+#
+#
+# class PatientWithAccount(db.Model):
+#     id = Column(Integer, primary_key=True, autoincrement=True)
+#     registration_date = Column(DateTime)
+#     user_id = Column(Integer, ForeignKey(User.id), nullable=False, unique=True)
+#     patient_id = Column(Integer, ForeignKey(Patient.id), nullable=False, unique=True)
+#
+#     def __str__(self):
+#         return self.name
+#
+#
+# class Nurse(db.Model):
+#     id = Column(Integer, primary_key=True, autoincrement=True)
+#     name = Column(String(50), nullable=True)
+#     user_id = Column(Integer, ForeignKey(User.id), nullable=False, unique=True)
+#
+#     def __str__(self):
+#         return self.name
+#
+#
+# class Doctor(db.Model):
+#     id = Column(Integer, primary_key=True, autoincrement=True)
+#     name = Column(String(50), nullable=True)
+#     user_id = Column(Integer, ForeignKey(User.id), nullable=False, unique=True)
+#
+#     def __str__(self):
+#         return self.name
+#
+#
+# class Cashier(db.Model):
+#     id = Column(Integer, primary_key=True, autoincrement=True)
+#     name = Column(String(50), nullable=True)
+#     user_id = Column(Integer, ForeignKey(User.id), nullable=False, unique=True)
+#
+#     def __str__(self):
+#         return self.name
+#
 
 class MedicineUnit(db.Model):
     __tablename__ = 'medicineunit'
     id = Column(Integer, primary_key=True, autoincrement=True)
     unit_name = Column(String(50), nullable=False, unique=True)
+    medicines = relationship('Medicine', backref='medicineunit')
 
     def __str__(self):
-        return self.tendonvi
+        return self.unit_name
 
 
 class Medicine(db.Model):
@@ -89,8 +90,9 @@ class Medicine(db.Model):
     medicine_name = Column(String(50), nullable=False, unique=True)
     how_to_use = Column(String(255), nullable=False, unique=True)
     price = Column(Float, default=0)
-    unit_name = Column(String(50), ForeignKey(MedicineUnit.unit_name), nullable=False)
-    unit = relationship(MedicineUnit, backref='medicines')
+    # unit_name = Column(String(50), ForeignKey(MedicineUnit.unit_name), nullable=False)
+    unit_id = Column(Integer, ForeignKey(MedicineUnit.id))
+
 
     def __str__(self):
         return self.medicine_name
@@ -102,14 +104,33 @@ class PhieuKham(db.Model):
     ngaykham = Column(DateTime, default=datetime.now())
     trieuchung = Column(String(255), nullable=False, unique=True)
     loaibenh = Column(String(50), nullable=False, unique=True)
+    receipt = relationship('Receipt', backref='phieukham', lazy=True)
+    patientlist_id = Column(Integer, ForeignKey('patientlist.id'))
 
-    phieukham_thuoc = db.Table('phieukham_thuoc',
-                               Column('phieukham_id', Integer, ForeignKey('phieukham.id'), primary_key=True),
-                               Column('thuoc_id', Integer, ForeignKey(Medicine.id), primary_key=True),
-                               Column('soluong', Integer, nullable=False))
+phieukham_thuoc = db.Table('phieukham_thuoc',
+                           Column('phieukham_id', Integer, ForeignKey(PhieuKham.id), primary_key=True),
+                           Column('thuoc_id', Integer, ForeignKey(Medicine.id), primary_key=True),
+                           Column('soluong', Integer, nullable=False))
+
+class Receipt(db.Model):
+    __tablename__ = 'receipt'
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(Integer, ForeignKey(User.id), nullable=True)
+    phieukham_id = Column(Integer, ForeignKey(PhieuKham.id))
 
 
 
+class PatientList(db.Model):
+    __tablename__ = 'patientlist'
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    name = Column(String(50), nullable=True, unique=True)
+    gender = Column(String(10), nullable=True, unique=True)
+    date_of_birth = Column(DateTime, nullable=True, unique=True)
+    address = Column(String(100), nullable=True, unique=True)
+    lich_su_benh = Column(String(255), nullable=True)
+    phieukhams = relationship('PhieuKham', backref='patientlist')
 
 
 if __name__ == '__main__':
