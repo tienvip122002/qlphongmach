@@ -131,6 +131,8 @@ def home():
 def services():
     return render_template('homepage/services.html')
 
+
+# đủ các kiểu login
 @app.route('/admin-login', methods=['post'])
 def signin_admin():
     err_msg = ""

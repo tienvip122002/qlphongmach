@@ -7,7 +7,7 @@ app = Flask(__name__)
 login = LoginManager(app=app)
 
 app.secret_key = '^%*&^^HJGHJGHJFD%^&%&*^*(^^^&^(*^^$%^GHJFGHJH'
-app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://root:%s@localhost:3360/phongmachdb?charset=utf8mb4" % quote('Bmzzxv62002@')
+app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://root:%s@localhost/phongmachdb?charset=utf8mb4" % quote('Admin@123')
 
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
 
