@@ -1,0 +1,45 @@
+{% extends 'layouts/base.html' %}
+
+{% block content %}
+ <div class="content-wrapper">
+        <div class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="card w-100">
+                        <div class="card-body">
+                            <form action="/medicine/create/submit" method="POST">
+                                <div class="form-group">
+                                    <label>Tên thuốc</label>
+                                    <input type="text" name="medicine_name" class="form-control" placeholder="Enter name">
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Cách dùng</label>
+                                    <input type="text" name="how_to_use" class="form-control" placeholder="Enter name">
+                                </div>
+                                <div class="form-group">
+                                    <label>Giá</label>
+                                    <input type="text" name="price" class="form-control" placeholder="Enter name">
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Đơn vị</label>
+                                    <select name="unit_id" class="custom-select">
+                                        {% for t in get_medicineunit %}
+                                        <option value="{{t.id}}">{{t.unit_name}}</option>
+                                         {% endfor %}
+                                    </select>
+                                </div>
+
+                                <button type="submit" value="Submit" class="btn btn-primary ">Submit</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}

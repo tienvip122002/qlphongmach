@@ -4,10 +4,87 @@ import dao
 from app import app, db, login, utils
 from flask_login import login_user, logout_user, login_required
 
-
+# trang admin
 @app.route('/')
 def index():
     return render_template('index.html', UserRoleEnum=UserRoleEnum)
+
+
+# đủ các kiểu login
+@app.route('/admin-login', methods=['post'])
+def signin_admin():
+    err_msg = ""
+    try:
+        username = request.form.get('username')
+        password = request.form.get('password')
+
+        user = utils.check_userlogin(username=username,
+                                 password=password,)
+        if user:
+            login_user(user=user)
+            return redirect(url_for('index'))
+        else:
+            err_msg = 'Tài khoản hoặc mật khẩu không chính xác'
+    except Exception as ex:
+        err_msg = str(ex)
+    return render_template('index.html', err_msg=err_msg)
+
+
+
+@app.route('/user-logout')
+def user_signout():
+    logout_user()
+    return redirect(url_for('home'))
+
+
+
+@app.route('/user-login', methods=['get', 'post'])
+def user_signin():
+    err_msg = ''
+    if request.method.__eq__('POST'):
+        try:
+            username = request.form.get('username')
+            password = request.form.get('password')
+
+            user = utils.check_userlogin(username=username, password=password)
+
+            if user:
+                login_user(user=user)
+                return redirect(url_for('index'))
+            else:
+                err_msg = 'Tên đăng nhập hoặc mật khẩu không chính xác'
+        except Exception as ex:
+            err_msg = str(ex)
+    return render_template('homepage/login.html', err_msg=err_msg)
+
+
+
+@app.route('/register', methods=['get', 'post'])
+def user_register():
+    err_msg = ""
+    if request.method.__eq__('POST'):
+        name = request.form.get('name')
+        username = request.form.get('username')
+        password = request.form.get('password')
+        confirm = request.form.get('confirm')
+
+        try:
+            if password.strip().__eq__(confirm.strip()):
+                utils.add_user(name=name, username=username, password=password)
+                return redirect(url_for('user_signin'))
+            else:
+                err_msg = 'Xác nhận mật khẩu không chính xác'
+        except Exception as ex:
+            err_msg = "Lỗi: " + str(ex)
+
+    return render_template('homepage/register.html', err_msg=err_msg)
+
+
+
+@login.user_loader
+def get_user(user_id):
+    return dao.get_user_by_id(user_id)
+
 
 # them1 sua xoa thuoc
 @app.route('/medicine/index')
@@ -132,80 +209,6 @@ def services():
     return render_template('homepage/services.html')
 
 
-# đủ các kiểu login
-@app.route('/admin-login', methods=['post'])
-def signin_admin():
-    err_msg = ""
-    try:
-        username = request.form.get('username')
-        password = request.form.get('password')
-
-        user = utils.check_userlogin(username=username,
-                                 password=password,)
-        if user:
-            login_user(user=user)
-            return redirect(url_for('index'))
-        else:
-            err_msg = 'Tài khoản hoặc mật khẩu không chính xác'
-    except Exception as ex:
-        err_msg = str(ex)
-    return render_template('index.html', err_msg=err_msg)
-
-
-
-@app.route('/user-logout')
-def user_signout():
-    logout_user()
-    return redirect(url_for('home'))
-
-
-
-@app.route('/user-login', methods=['get', 'post'])
-def user_signin():
-    err_msg = ''
-    if request.method.__eq__('POST'):
-        try:
-            username = request.form.get('username')
-            password = request.form.get('password')
-
-            user = utils.check_userlogin(username=username, password=password)
-
-            if user:
-                login_user(user=user)
-                return redirect(url_for('index'))
-            else:
-                err_msg = 'Tên đăng nhập hoặc mật khẩu không chính xác'
-        except Exception as ex:
-            err_msg = str(ex)
-    return render_template('homepage/login.html', err_msg=err_msg)
-
-
-
-@app.route('/register', methods=['get', 'post'])
-def user_register():
-    err_msg = ""
-    if request.method.__eq__('POST'):
-        name = request.form.get('name')
-        username = request.form.get('username')
-        password = request.form.get('password')
-        confirm = request.form.get('confirm')
-
-        try:
-            if password.strip().__eq__(confirm.strip()):
-                utils.add_user(name=name, username=username, password=password)
-                return redirect(url_for('user_signin'))
-            else:
-                err_msg = 'Xác nhận mật khẩu không chính xác'
-        except Exception as ex:
-            err_msg = "Lỗi: " + str(ex)
-
-    return render_template('homepage/register.html', err_msg=err_msg)
-
-
-
-@login.user_loader
-def get_user(user_id):
-    return dao.get_user_by_id(user_id)
 
 if __name__ == "__main__":
     app.run(debug=True)

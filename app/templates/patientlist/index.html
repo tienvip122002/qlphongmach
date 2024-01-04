@@ -1,0 +1,55 @@
+{% extends 'layouts/base.html' %}
+
+{% block content %}
+    <div class="content-wrapper">
+        <div class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                            <a href="/patientlist/create" class="btn btn-success float-right m-2">Add</a>
+                    </div>
+                    <div class="card w-100">
+                        <div class="card-body">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Tên bệnh nhân</th>
+                                        <th scope="col">Giới tính</th>
+                                        <th scope="col">Ngày sinh</th>
+                                        <th scope="col">Địa chỉ </th>
+                                        <th scope="col">Lịch sử bệnh </th>
+                                        <th scope="col">manament</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {% for t in thuoc %}
+                                        <tr>
+
+                                            <th scope="row">{{t.id}}</th>
+                                            <td>{{t.name}}</td>
+                                            <td>{{t.gender}}</td>
+                                            <td>{{t.date_of_birth}}</td>
+                                            <td>{{t.address}}</td>
+                                            <td>{{t.lich_su_benh}}</td>
+                                                    <a href="/patientlist/update/{{t.id}}"
+                                                        class="btn btn-warning">Edit</a>
+                                                    <a href="/patientlist/delete/{{t.id}}"
+                                                        class="btn btn-danger">Delete</a>
+                                            </td>
+
+                                        </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
