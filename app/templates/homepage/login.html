@@ -32,12 +32,12 @@
     <h1 class="text-center text-primary mt-5">ĐĂNG NHẬP NGƯỜI DÙNG</h1>
 
     <div class="container mt-5">
-<!--        {% if err_msg %}-->
-<!--        <div class="alert alert-danger">-->
-<!--            <h4>{{ err_msg }}</h4>-->
-<!--        </div>-->
-<!--        {% endif %}-->
-        <form method="post" action="">
+        {% if err_msg %}
+        <div class="alert alert-danger">
+            <h4>{{ err_msg }}</h4>
+        </div>
+        {% endif %}
+        <form method="post" action="{{ url_for('user_signin') }}">
         <div class="form-group text-center">
             <label for="username">Tên đăng nhập</label>
             <input type="text" class="form-control mx-auto mb-3" id="username" name="username" required style="width:500px"/>

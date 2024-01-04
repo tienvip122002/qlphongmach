@@ -1,0 +1,26 @@
+{% extends 'layouts/base.html' %}
+
+{% block content %}
+ <div class="content-wrapper">
+        <div class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="card w-100">
+                        <div class="card-body">
+                            <form action="/medicineunit/update/{{task2.id}}" method="POST">
+                                <div class="form-group">
+                                    <label>Đơn vi</label>
+                                    <input type="text" name="unit_name" value="{{task2.unit_name}}" class="form-control" placeholder="Enter name">
+                                </div>
+                                <button type="submit" value="Submit" class="btn btn-primary ">Submit</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}

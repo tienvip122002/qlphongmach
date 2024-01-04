@@ -37,7 +37,7 @@
             <h4>{{ err_msg }}</h4>
         </div>
         {% endif %}
-        <form method="post" action="">
+        <form method="post" action="{{ url_for('user_register') }}">
         <div class="form-group text-center">
             <label for="name">Họ tên</label>
             <input type="text" class="form-control mx-auto mb-3" id="name" name="name" required style="width:500px"/>

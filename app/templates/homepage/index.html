@@ -69,15 +69,18 @@
                                         </ul>
                                     </nav>
                                 </div>
-                                <li class="nav-item">
-                                    <a class="nav-link text-info" href="/logout">Đăng xuất</a>
-                                </li>
+                                 {% if current_user.is_authenticated %}
                                 <div class="header-right-btn f-right d-none d-lg-block ml-15">
-                                    <a href="/login" class="btn  header-btn">Login</a>
+                                    <a href="{{ url_for('user_signout') }}" class="btn  header-btn">Đăng xuất</a>
+                                </div>
+                                {% else %}
+                                <div class="header-right-btn f-right d-none d-lg-block ml-15">
+                                    <a href="{{ url_for('user_signin') }}" class="btn  header-btn">Login</a>
                                 </div>
                                 <div class="header-right-btn f-right d-none d-lg-block ml-15">
-                                    <a href="/register" class="btn  header-btn">Register</a>
+                                    <a href="{{ url_for('user_register') }}" class="btn  header-btn">Register</a>
                                 </div>
+                                {% endif %}
                             </div>
                         </div>
                         <!-- Mobile Menu -->
