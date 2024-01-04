@@ -46,31 +46,31 @@ class PatientWithAccount(db.Model):
         return self.name
 
 
-class Nurse(db.Model):
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String(50), nullable=True)
-    user_id = Column(Integer, ForeignKey(User.id), nullable=False, unique=True)
-
-    def __str__(self):
-        return self.name
-
-
-class Doctor(db.Model):
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String(50), nullable=True)
-    user_id = Column(Integer, ForeignKey(User.id), nullable=False, unique=True)
-
-    def __str__(self):
-        return self.name
-
-
-class Cashier(db.Model):
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String(50), nullable=True)
-    user_id = Column(Integer, ForeignKey(User.id), nullable=False, unique=True)
-
-    def __str__(self):
-        return self.name
+# class Nurse(db.Model):
+#     id = Column(Integer, primary_key=True, autoincrement=True)
+#     name = Column(String(50), nullable=True)
+#     user_id = Column(Integer, ForeignKey(User.id), nullable=False, unique=True)
+#
+#     def __str__(self):
+#         return self.name
+#
+#
+# class Doctor(db.Model):
+#     id = Column(Integer, primary_key=True, autoincrement=True)
+#     name = Column(String(50), nullable=True)
+#     user_id = Column(Integer, ForeignKey(User.id), nullable=False, unique=True)
+#
+#     def __str__(self):
+#         return self.name
+#
+#
+# class Cashier(db.Model):
+#     id = Column(Integer, primary_key=True, autoincrement=True)
+#     name = Column(String(50), nullable=True)
+#     user_id = Column(Integer, ForeignKey(User.id), nullable=False, unique=True)
+#
+#     def __str__(self):
+#         return self.name
 
 
 class MedicineUnit(db.Model):
